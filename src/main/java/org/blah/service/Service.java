@@ -45,4 +45,9 @@ public class Service {
     public User saveUser(User user) {
         return dao.saveUser(user);
     }
+
+    @Transactional
+    public User updateUser(User user) {
+        return dao.updateUser(user);
+    }
 }
