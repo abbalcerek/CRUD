@@ -1,11 +1,7 @@
 package org.blah.dao;
 
-import org.blah.entity.User;
 import org.junit.Assert;
 import org.junit.Test;
-
-import javax.persistence.Query;
-import java.util.List;
 
 /**
  * Created by adam on 27.08.16.
