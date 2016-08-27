@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+<body>
+<h1 style="{color: blue;}">asdfsadfasdfasdf</h1>
+
+<form id="userForm">
+  <label for="firstName">First Name</label><br>
+  <input type="text" name="firstName" id="firstName"><br>
+
+  <label for="lastName">Last Name</label><br>
+  <input type="text" name="lastName" id="lastName"><br>
+
+  <label for="age">Age</label><br>
+  <input type="number" name="age" min="1" id="age"><br>
+
+  <label for="phoneNumber">Phone Number</label><br>
+  <input type="text" name="phoneNumber" id="phoneNumber">
+
+  <br>
+  <input type="button" value="submit" onclick="addUser()">
+
+</form>
+<div id="users">
+  <ul id="userList"></ul>
+</div>
+
+<script type="text/javascript">
+  let path = "http://localhost:8080/";
+
+  $.get(`${path}users`, function(data) {
+    $.each(data, function(index, user) {
+      console.log(user.id);
+      appendUser(user)
+    });
+  });
+
+  var addUser = function () {
+
+    let form = {};
+    $.each($('#userForm').serializeArray(), function (i, field) {
+      form[field.name] = field.value || "";
+    });
+
+    $.ajax({
+      type: "POST",
+      url: `${path}saveUser`,
+      data: JSON.stringify(form),
+      success: function(user) {
+        appendUser(user)
+      },
+      contentType:'application/json',
+      dataType: "json"
+    });
+  };
+  
+  var removeUser = function (userId) {
+    $.ajax({
+      type: "DELETE",
+      url: `${path}deleteUser/${userId}`,
+      success: function() {
+        $(`#${userId}`).remove();
+      }
+    });
+  };
+
+  var appendUser = function (user) {
+    $("#userList").append(
+      `<li id="${user.id}">name: ${user.firstName} ${user.lastName} 
+         <br> phone: ${user.phoneNumber}
+         <br>age: ${user.age}
+         <br><button onclick="removeUser(${user.id})" id="delete-${user.id}">delete</button>
+       </li>`);
+  }
+</script> 
+</body>
+</html>
