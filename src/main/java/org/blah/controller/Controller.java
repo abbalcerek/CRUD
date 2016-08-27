@@ -27,7 +27,6 @@ class Controller {
         return service.getUserById(id);
     }
 
-//    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     public @ResponseBody List<User> getUsers() {
         return service.getUsers();
