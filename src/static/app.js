@@ -24,7 +24,9 @@ let addUser = function () {
         data: JSON.stringify(form),
         success: function(user) {
             appendUser(user);
-            formHtml.reset();
+            formHtml.each(function(){
+                this.reset();
+            });
         },
         contentType:'application/json',
         dataType: "json"
