@@ -78,7 +78,7 @@
       type: "DELETE",
       url: `${path}deleteUser/${userId}`,
       success: function() {
-        $(`#${userId}`).remove();
+        $(`#user-${userId}`).remove();
       }
     });
   };
@@ -89,7 +89,7 @@
 
   let appendUser = function (user) {
     $("#userList").append(
-      `<li id="${user.id}" class="list-group-item">name: ${user.firstName} ${user.lastName}
+      `<li id="user-${user.id}" class="list-group-item">name: ${user.firstName} ${user.lastName}
          <br> phone: ${user.phoneNumber}
          <br>age: ${user.age}
          <br><button class="btn btn-default" onclick="removeUser(${user.id})" id="delete-${user.id}">delete</button>
