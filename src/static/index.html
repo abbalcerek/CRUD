@@ -16,25 +16,25 @@
 
   <div class="panel panel-default">
     <div class="panel-body">
-        <form id="userForm" class="form-horizontal">
-          <div class="form-group">
-            <label for="firstName">First Name</label><br>
-            <input type="text" name="firstName" id="firstName" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="lastName">Last Name</label><br>
-            <input type="text" name="lastName" id="lastName" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="age">Age</label><br>
-            <input type="number" name="age" min="1" id="age" class="form-control">
-          </div>
-          <div class="form-group">
-            <label for="phoneNumber">Phone Number</label><br>
-            <input type="text" name="phoneNumber" id="phoneNumber" class="form-control">
-          </div>
-          <input type="button" class="btn btn-primary" value="submit" onclick="addUser()">
-        </form>
+      <form id="userForm" class="form-horizontal">
+        <div class="form-group">
+          <label for="firstName">First Name</label><br>
+          <input type="text" name="firstName" id="firstName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label><br>
+          <input type="text" name="lastName" id="lastName" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="age">Age</label><br>
+          <input type="number" name="age" min="1" id="age" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="phoneNumber">Phone Number</label><br>
+          <input type="text" name="phoneNumber" id="phoneNumber" class="form-control">
+        </div>
+        <input type="button" class="btn btn-primary" value="submit" onclick="addUser()">
+      </form>
     </div>
     <div id="users">
       <ul id="userList" class="list-group"></ul>
@@ -55,7 +55,8 @@
   let addUser = function () {
 
     let form = {};
-    $.each($('#userForm').serializeArray(), function (i, field) {
+    let formHtml = $('#userForm');
+    $.each(formHtml.serializeArray(), function (i, field) {
       form[field.name] = field.value || "";
     });
 
@@ -64,7 +65,8 @@
       url: `${path}saveUser`,
       data: JSON.stringify(form),
       success: function(user) {
-        appendUser(user)
+        appendUser(user);
+        formHtml.reset();
       },
       contentType:'application/json',
       dataType: "json"
@@ -81,12 +83,17 @@
     });
   };
 
+  let editUser = function (userId) {
+    alert(`Updating user with id: ${userId}`);
+  };
+
   let appendUser = function (user) {
     $("#userList").append(
       `<li id="${user.id}" class="list-group-item">name: ${user.firstName} ${user.lastName}
          <br> phone: ${user.phoneNumber}
          <br>age: ${user.age}
          <br><button class="btn btn-default" onclick="removeUser(${user.id})" id="delete-${user.id}">delete</button>
+         <button class="btn btn-default" onclick="editUser(${user.id})" id="update-${user.id}">update</button>
        </li>`);
   }
 </script> 
