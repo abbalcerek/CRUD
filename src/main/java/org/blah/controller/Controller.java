@@ -43,6 +43,7 @@ class Controller {
         return service.saveUser(user);
     }
 
+    @CrossOrigin(origins = "*")
     @RequestMapping(value = "/updateUser", method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
     public User updateUser(@RequestBody User user) {
         return service.updateUser(user);

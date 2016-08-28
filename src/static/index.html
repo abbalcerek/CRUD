@@ -2,8 +2,12 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -39,6 +43,39 @@
     <div id="users">
       <ul id="userList" class="list-group"></ul>
     </div>
+
+    <div class="modal fade" id="edit-modal" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Edit User</h4>
+          </div>
+          <div class="modal-body">
+            <form id="updateUserForm" class="form-horizontal">
+              <div class="form-group">
+                <label for="firstName">First Name</label><br>
+                <input type="text" name="firstName" id="firstNameUpdate" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label><br>
+                <input type="text" name="lastName" id="lastNameUpdate" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="age">Age</label><br>
+                <input type="number" name="age" min="1" id="ageUpdate" class="form-control">
+              </div>
+              <div class="form-group">
+                <label for="phoneNumber">Phone Number</label><br>
+                <input type="text" name="phoneNumber" id="phoneNumberUpdate" class="form-control">
+              </div>
+              <input type="button" class="btn btn-primary" value="submit" data-dismiss="modal" onclick="editUser()">
+              <input type="button" class="btn btn-default" value="cancel" data-dismiss="modal">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -47,7 +84,6 @@
 
   $.get(`${path}users`, function(data) {
     $.each(data, function(index, user) {
-      console.log(user.id);
       appendUser(user)
     });
   });
@@ -83,8 +119,32 @@
     });
   };
 
-  let editUser = function (userId) {
-    alert(`Updating user with id: ${userId}`);
+  let getUser = function(userId, success) {
+    $.ajax({
+      type: "GET",
+      url: `${path}user/${userId}`,
+      success: success
+    });
+  };
+
+  let editUser = function () {
+    let form = {id: editedUser.id};
+
+    let formHtml = $('#updateUserForm');
+    $.each(formHtml.serializeArray(), function (i, field) {
+      form[field.name] = field.value || "";
+    });
+
+    $.ajax({
+      type: "PUT",
+      url: `${path}updateUser`,
+      data: JSON.stringify(form),
+      success: function(user) {
+        modifyUser(user);
+      },
+      contentType:'application/json',
+      dataType: "json"
+    });
   };
 
   let appendUser = function (user) {
@@ -93,9 +153,35 @@
          <br> phone: ${user.phoneNumber}
          <br>age: ${user.age}
          <br><button class="btn btn-default" onclick="removeUser(${user.id})" id="delete-${user.id}">delete</button>
-         <button class="btn btn-default" onclick="editUser(${user.id})" id="update-${user.id}">update</button>
+         <button class="btn btn-default" data-toggle="modal" data-target="#edit-modal"
+           id="update-${user.id}"  onclick="setEditedUser(${user.id})">update</button>
        </li>`);
-  }
+  };
+
+  let modifyUser = function (user) {
+    $(`#user-${user.id}`).html(
+      `name: ${user.firstName} ${user.lastName}
+      <br> phone: ${user.phoneNumber}
+      <br>age: ${user.age}
+      <br><button class="btn btn-default" onclick="removeUser(${user.id})" id="delete-${user.id}">delete</button>
+      <button class="btn btn-default" data-toggle="modal" data-target="#edit-modal"
+        id="update-${user.id}"  onclick="setEditedUser(${user.id})">update</button>`
+    );
+  };
+
+  let setEditedUser = function(userId) {
+      getUser(userId, function (data) {
+        editedUser = data;
+        document.getElementById("firstNameUpdate").defaultValue = data.firstName;
+        document.getElementById("lastNameUpdate").defaultValue = data.lastName;
+        document.getElementById("ageUpdate").defaultValue = data.age;
+        document.getElementById("phoneNumberUpdate").defaultValue = data.phoneNumber;
+      })
+  };
+
+  //state
+  let editedUser = undefined;
+
 </script> 
 </body>
 </html>
