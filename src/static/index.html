@@ -170,13 +170,13 @@
   };
 
   let setEditedUser = function(userId) {
-      getUser(userId, function (data) {
-        editedUser = data;
-        document.getElementById("firstNameUpdate").defaultValue = data.firstName;
-        document.getElementById("lastNameUpdate").defaultValue = data.lastName;
-        document.getElementById("ageUpdate").defaultValue = data.age;
-        document.getElementById("phoneNumberUpdate").defaultValue = data.phoneNumber;
-      })
+    getUser(userId, function (data) {
+      editedUser = data;
+      document.getElementById("firstNameUpdate").defaultValue = data.firstName;
+      document.getElementById("lastNameUpdate").defaultValue = data.lastName;
+      document.getElementById("ageUpdate").defaultValue = data.age;
+      document.getElementById("phoneNumberUpdate").defaultValue = data.phoneNumber;
+    })
   };
 
   //state
