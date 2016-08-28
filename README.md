@@ -10,6 +10,6 @@ Example CRUD application using Spring boot, hibernate, jquery, bootstrap.
 
 ### To run with maven:
 
-1. Build project with maven - from project home directory execute command mvn clean package to build project. It will
+1. Build project with maven - from project home directory execute command `mvn clean package` to build project. It will
    create jar file in catalog <base project catalog>/target
 2. Run jar file with the command java -jar <path to jar file>
