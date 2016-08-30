@@ -1,6 +1,6 @@
 -- create database test_db;
-
--- create schema test_schema;
+--
+create schema test_schema;
 
 drop table if exists test_schema.user;
 

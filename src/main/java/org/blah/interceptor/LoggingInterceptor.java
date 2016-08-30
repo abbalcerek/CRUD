@@ -1,14 +1,13 @@
 package org.blah.interceptor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Created by adam on 26.08.16.
@@ -20,6 +19,7 @@ public class LoggingInterceptor extends HandlerInterceptorAdapter {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response,
                            Object handler, ModelAndView modelAndView) throws Exception {
-        log.debug( new Date() + " - " + request.getMethod() + " " + request.getRemoteUser());
+        log.debug( new Date() + " - " + request.getMethod() + " " + request.getRequestURL()
+                + " : " + request.getParameterMap());
     }
 }
